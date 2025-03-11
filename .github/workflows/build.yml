@@ -26,8 +26,8 @@ jobs:
               build-essential git openjdk-11-jdk unzip zip \
               libncurses5-dev libstdc++6 libffi-dev libssl-dev \
               libsqlite3-dev libgdbm-dev libbz2-dev liblzma-dev \
-              zlib1g-dev libreadline-dev tk-dev  # Changed from libtk8.6-dev to tk-dev
-          pip install buildozer
+              zlib1g-dev libreadline-dev tk-dev
+          pip install buildozer cython  # Install Cython along with Buildozer
 
       - name: Initialize Buildozer (if not exists)
         run: |
