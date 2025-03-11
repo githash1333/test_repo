@@ -29,9 +29,13 @@ jobs:
               zlib1g-dev libreadline-dev tk-dev  # Changed from libtk8.6-dev to tk-dev
           pip install buildozer
 
-      - name: Initialize Buildozer
+      - name: Initialize Buildozer (if not exists)
         run: |
-          buildozer init  # This creates the buildozer.spec file if it doesn't exist
+          if [ ! -f buildozer.spec ]; then
+            buildozer init  # This creates the buildozer.spec file if it doesn't exist
+          else
+            echo "buildozer.spec already exists, skipping initialization."
+          fi
 
       - name: Build Android APK
         run: |
