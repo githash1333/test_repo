@@ -1,0 +1,6 @@
+239
+internet
+
+p4a
+version
+orientation
