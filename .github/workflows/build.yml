@@ -26,7 +26,7 @@ jobs:
               build-essential git openjdk-11-jdk unzip zip \
               libncurses5-dev libstdc++6 libffi-dev libssl-dev \
               libsqlite3-dev libgdbm-dev libbz2-dev liblzma-dev \
-              zlib1g-dev libreadline-dev libtk8.6-dev
+              zlib1g-dev libreadline-dev tk-dev  # Changed from libtk8.6-dev to tk-dev
           pip install buildozer
 
       - name: Initialize Buildozer
