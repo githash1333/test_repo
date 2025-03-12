@@ -51,6 +51,17 @@ jobs:
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
+      - name: Verify AIDL Installation
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/build-tools/31.0.0:$PATH
+          if [ ! -f "$ANDROID_HOME/build-tools/31.0.0/aidl" ]; then
+            echo "❌ AIDL not found!"
+            exit 1
+          fi
+          echo "✅ AIDL is installed correctly!"
+
       - name: Initialize Buildozer (If Not Exists)
         run: |
           if [ ! -f buildozer.spec ]; then
@@ -61,7 +72,7 @@ jobs:
         run: |
           sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
           sed -i 's/^requirements =.*/requirements = python3,flask,kivy,kivy-garden/' buildozer.spec
-          sed -i 's/^package.domain =.*/package.domain = org.example/' buildozer.spec
+          sed -i 's/^package.domain =.*/package.domain = org.firstbytebox/' buildozer.spec
           sed -i 's/^package.name =.*/package.name = MyFlaskApp/' buildozer.spec
           sed -i 's/^package.version =.*/package.version = 1.0.0/' buildozer.spec
 
