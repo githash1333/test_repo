@@ -34,7 +34,7 @@ ptyprocess==0.7.0
 pycparser==2.22
 Pygments==2.19.1
 pyjnius==1.6.1
-pypiwin32==223
+#pypiwin32==223
 pyproject_hooks==1.2.0
 python-for-android==2024.1.21
 pythonnet==3.0.5
