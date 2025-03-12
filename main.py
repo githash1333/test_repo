@@ -1,9 +1,11 @@
-from kivy.app import App
-from kivy.uix.label import Label
+# app.py
+from flask import Flask, render_template
 
-class HelloWorldApp(App):
-    def build(self):
-        return Label(text='Hello, World!')
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    HelloWorldApp().run()
+    app.run(debug=True)
