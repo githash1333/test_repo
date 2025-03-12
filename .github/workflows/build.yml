@@ -32,7 +32,7 @@ jobs:
         pyinstaller --onefile main.py  # Replace 'main.py' with your main Python file
 
     - name: Upload executable
-      uses: actions/upload-artifact@v3.1.0  # Use the latest version
+      uses: actions/upload-artifact@v4  # Use the latest version
       with:
         name: main
         path: dist/main  # Adjust the path to your executable
