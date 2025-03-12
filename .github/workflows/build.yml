@@ -34,6 +34,12 @@ jobs:
           pip install --upgrade pip setuptools wheel
           pip install cython buildozer
 
+      - name: Install Android SDK & AIDL
+        run: |
+          sudo apt install -y android-sdk adb
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "cmdline-tools;latest" "ndk;23.1.7779620"
+
       - name: Initialize Buildozer (If Not Exists)
         run: |
           if [ ! -f buildozer.spec ]; then
@@ -44,8 +50,8 @@ jobs:
         run: |
           sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
           sed -i 's/^requirements =.*/requirements = python3,flask,kivy,kivy-garden/' buildozer.spec
-          sed -i 's/^package.domain =.*/package.domain = org.example/' buildozer.spec
-          sed -i 's/^package.name =.*/package.name = MyFlaskApp/' buildozer.spec
+          sed -i 's/^package.domain =.*/package.domain = org.firstbytebox/' buildozer.spec
+          sed -i 's/^package.name =.*/package.name = FirstByteBox/' buildozer.spec
           sed -i 's/^package.version =.*/package.version = 1.0.0/' buildozer.spec
 
       - name: Build APK
