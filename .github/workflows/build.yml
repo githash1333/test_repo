@@ -1,47 +1,59 @@
-name: Build BeeWare Application
+name: Build APK
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main  # Trigger on push to main branch
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'  # Specify the Python version you need
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install briefcase  # Install BeeWare's Briefcase
+      - name: Install System Dependencies
+        run: |
+          sudo apt update && sudo apt install -y \
+          python3-pip build-essential git unzip zip \
+          default-jdk libffi-dev libssl-dev \
+          libjpeg-dev zlib1g-dev \
+          libsqlite3-dev libgstreamer1.0 \
+          libgstreamer-plugins-base1.0 \
+          libgstreamer-plugins-good1.0 \
+          libgles2-mesa-dev cython
 
-    - name: Build for Android
-      run: |
-        briefcase build android
+      - name: Install Buildozer & Dependencies
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install buildozer cython
 
-    - name: Build for macOS
-      run: |
-        briefcase build macOS
+      - name: Initialize Buildozer (If Not Exists)
+        run: |
+          if [ ! -f buildozer.spec ]; then
+            buildozer init
+          fi
 
-    - name: Upload macOS Build
-      uses: actions/upload-artifact@v4
-      with:
-        name: macOS Build
-        path: ./macOS/build/*  # Adjust the path to your macOS build output
+      - name: Modify Buildozer Spec File
+        run: |
+          sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
+          sed -i 's/^requirements =.*/requirements = python3,flask,kivy,kivy-garden/' buildozer.spec
+          sed -i 's/^package.domain =.*/package.domain = org.example/' buildozer.spec
+          sed -i 's/^package.name =.*/package.name = MyFlaskApp/' buildozer.spec
+          sed -i 's/^package.version =.*/package.version = 1.0.0/' buildozer.spec
 
-    - name: Upload Android Build
-      uses: actions/upload-artifact@v4
-      with:
-        name: Android Build
-        path: ./android/build/*  # Adjust the path to your Android build output
+      - name: Build APK
+        run: buildozer -v android debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MyFlaskApp-APK
+          path: bin/*.apk
