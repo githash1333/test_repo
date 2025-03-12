@@ -1,4 +1,4 @@
-name: Build Executable
+name: Build BeeWare Application
 
 on:
   push:
@@ -24,15 +24,24 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install Flask pyinstaller
-        pip install -r requirements.txt  # Install other dependencies if you have a requirements file
+        pip install briefcase  # Install BeeWare's Briefcase
 
-    - name: Build executable
+    - name: Build for macOS
       run: |
-        pyinstaller --onefile --add-data "templates;templates" main.py  # Replace 'main.py' with your main Python file
+        briefcase build macOS
 
-    - name: Upload executable
-      uses: actions/upload-artifact@v4  # Use the latest version
+    - name: Build for Android
+      run: |
+        briefcase build android
+
+    - name: Upload macOS Build
+      uses: actions/upload-artifact@v4
       with:
-        name: main
-        path: dist/main  # Adjust the path to your executable
+        name: macOS Build
+        path: ./macOS/build/*  # Adjust the path to your macOS build output
+
+    - name: Upload Android Build
+      uses: actions/upload-artifact@v4
+      with:
+        name: Android Build
+        path: ./android/build/*  # Adjust the path to your Android build output
