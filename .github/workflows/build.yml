@@ -26,13 +26,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install briefcase  # Install BeeWare's Briefcase
 
-    - name: Build for macOS
-      run: |
-        briefcase build macOS
-
     - name: Build for Android
       run: |
         briefcase build android
+
+    - name: Build for macOS
+      run: |
+        briefcase build macOS
 
     - name: Upload macOS Build
       uses: actions/upload-artifact@v4
