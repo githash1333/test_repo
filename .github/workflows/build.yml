@@ -26,6 +26,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           build-essential \
+          autoconf \  # Added autoconf
           python3-dev \
           python3-pip \
           python3-setuptools \
@@ -61,7 +62,7 @@ jobs:
         buildozer -v android debug  # Build the app in debug mode
 
     - name: Upload the APK
-      uses: actions/upload-artifact@v3  # Updated to the latest version
+      uses: actions/upload-artifact@v3.1.0  # Use a specific version
       with:
         name: my-flask-app-debug
         path: your_flask_project_directory/bin/*.apk  # Change this to your APK output path
