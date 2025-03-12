@@ -27,18 +27,29 @@ jobs:
           libjpeg-dev zlib1g-dev \
           libsqlite3-dev libgles2-mesa-dev \
           libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-          libgstreamer-plugins-good1.0-dev
+          libgstreamer-plugins-good1.0-dev \
+          wget
 
       - name: Install Python Dependencies
         run: |
           pip install --upgrade pip setuptools wheel
           pip install cython buildozer
 
-      - name: Install Android SDK & AIDL
+      - name: Set up Android SDK
         run: |
-          sudo apt install -y android-sdk adb
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "cmdline-tools;latest" "ndk;23.1.7779620"
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/build-tools/31.0.0:$PATH
+          
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          cd $ANDROID_HOME/cmdline-tools
+          
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip commandlinetools-linux-9477386_latest.zip
+          mv cmdline-tools latest
+          
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
       - name: Initialize Buildozer (If Not Exists)
         run: |
@@ -50,15 +61,19 @@ jobs:
         run: |
           sed -i 's/^source.include_exts =.*/source.include_exts = py,png,jpg,kv,atlas/' buildozer.spec
           sed -i 's/^requirements =.*/requirements = python3,flask,kivy,kivy-garden/' buildozer.spec
-          sed -i 's/^package.domain =.*/package.domain = org.firstbytebox/' buildozer.spec
-          sed -i 's/^package.name =.*/package.name = FirstByteBox/' buildozer.spec
+          sed -i 's/^package.domain =.*/package.domain = org.example/' buildozer.spec
+          sed -i 's/^package.name =.*/package.name = MyFlaskApp/' buildozer.spec
           sed -i 's/^package.version =.*/package.version = 1.0.0/' buildozer.spec
 
       - name: Build APK
-        run: buildozer -v android debug
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/build-tools/31.0.0:$PATH
+          buildozer -v android debug
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: MyFlaskApp-APK
           path: bin/*.apk
