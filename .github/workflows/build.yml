@@ -32,7 +32,7 @@ jobs:
         pyinstaller --onefile main.py  # Replace 'your_script.py' with your main Python file
 
     - name: Upload executable
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: main
         path: dist/main  # Adjust the path to your executable
