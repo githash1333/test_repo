@@ -24,12 +24,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
+        pip install Flask pyinstaller
         pip install -r requirements.txt  # Install other dependencies if you have a requirements file
 
     - name: Build executable
       run: |
-        pyinstaller --onefile main.py  # Replace 'main.py' with your main Python file
+        pyinstaller --onefile --add-data "templates;templates" main.py  # Replace 'main.py' with your main Python file
 
     - name: Upload executable
       uses: actions/upload-artifact@v4  # Use the latest version
