@@ -75,11 +75,11 @@ jobs:
             pkg-config \
             libncurses5-dev \
             libncursesw5-dev \
-            libtinfo5 \
             cmake \
             libffi-dev \
             libssl-dev \
-            automake
+            automake \
+            libtinfo-dev  # Added this line
 
       # Set up Java 17 required by Gradle
       - name: Setup Java 17 required by Gradle
@@ -92,7 +92,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8' #set your python version
+          python-version: '3.8' # Set your Python version
 
       # Install pip dependencies
       - name: Install pip dependencies
