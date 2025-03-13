@@ -23,10 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Tests (Optional)
-        run: |
-          pytest  # Ensure you have tests written
-
       - name: Package Flask App
         run: |
           python setup.py sdist bdist_wheel
@@ -53,4 +49,4 @@ jobs:
 
       - name: Run Flask with Gunicorn
         run: |
-          gunicorn -w 4 -b 0.0.0.0:5000 app:app
+          gunicorn -w 4 -b 0.0.0.0:5000 app:main
