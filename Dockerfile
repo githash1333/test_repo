@@ -161,7 +161,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 
 # Expose P4A and server port
-EXPOSE 8501
+# EXPOSE 8501
 
 # Ensure buildozer.spec file contains server and port configuration
 RUN if [ -f buildozer.spec ]; then \
