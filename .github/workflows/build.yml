@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Package
         run: |
-          python setup.py sdist bdist_wheel
+          python main.py sdist bdist_wheel
 
       - name: Upload Package
         uses: actions/upload-artifact@v4
