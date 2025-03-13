@@ -32,7 +32,7 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Upload Package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flask-app-package
           path: dist/
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: |
